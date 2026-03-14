@@ -1,0 +1,44 @@
+nameOverride: ""
+fullnameOverride: ""
+
+commonLabels: {}
+commonAnnotations: {}
+
+team: ""
+environment: ""
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+providerConfigRef:
+  name: default
+
+writeConnectionSecretToRef:
+  namespace: default
+
+caches:
+  redis:
+    - name: my-redis
+      capacity: 1
+      family: "C"
+      location: "eastus"
+      redisVersion: "6"
+      skuName: "Standard"
+      resourceGroupName: "my-resource-group"
+      minimumTlsVersion: "1.2"
+      # publicNetworkAccessEnabled: true
+      # nonSslPortEnabled: false
+      # redisConfiguration:
+      #   maxmemoryPolicy: volatile-lru
+      # tags: {}

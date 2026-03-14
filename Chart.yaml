@@ -1,0 +1,10 @@
+apiVersion: v2
+name: plat-eng-cache-package
+description: A Helm chart for Kubernetes Building Block for Cache
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+dependencies:
+  - name: plat-eng-commons-package
+    version: "0.1.0"
+    repository: "oci://ghcr.io/lurodrisilva/helm-charts"
