@@ -1,0 +1,33 @@
+# Patterns to ignore when building packages.
+# Helm uses .helmignore (similar to .gitignore).
+
+# Source control
+.git/
+.gitignore
+.helmignore
+
+# CI/CD and build tools
+.github/
+Makefile
+.yamllint.yml
+
+# Test files (not needed in released chart)
+tests/
+
+# Helm build artifacts
+Chart.lock
+charts/
+
+# Secrets
+*secrets*
+*secret*
+
+# IDE/OS
+.idea/
+.vscode/
+.DS_Store
+*.swp
+*.tmp
+
+# Sisyphus
+.sisyphus/
