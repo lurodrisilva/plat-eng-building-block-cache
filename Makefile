@@ -48,6 +48,8 @@ lint-all: lint yamllint kubeconform ## Run helm lint, yamllint, and kubeconform
 
 ## Run helm-unittest tests
 test: ## Run helm-unittest tests
+	@echo "Building test chart dependencies..."
+	helm dependency build tests/chart
 	@echo "Running helm-unittest tests..."
 	helm unittest tests/chart
 
