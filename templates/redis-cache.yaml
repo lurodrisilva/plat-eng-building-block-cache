@@ -1,0 +1,41 @@
+# DOCS: https://marketplace.upbound.io/providers/upbound/provider-azure-cache/v2.3.0
+---
+{{- if .Values.caches.redis }}
+{{- range $index, $redis := .Values.caches.redis }}
+---
+apiVersion: cache.azure.upbound.io/v1beta2
+kind: RedisCache
+metadata:
+  name: {{ $redis.name }}
+  labels:
+    {{- include "myorg.labels" $ | nindent 4 }}
+spec:
+  forProvider:
+    capacity: {{ $redis.capacity }}
+    family: {{ $redis.family | quote }}
+    location: {{ $redis.location | quote }}
+    redisVersion: {{ $redis.redisVersion | quote }}
+    skuName: {{ $redis.skuName | quote }}
+    resourceGroupName: {{ $redis.resourceGroupName | quote }}
+    minimumTlsVersion: {{ $redis.minimumTlsVersion | default "1.2" | quote }}
+    {{- if hasKey $redis "nonSslPortEnabled" }}
+    nonSslPortEnabled: {{ $redis.nonSslPortEnabled }}
+    {{- end }}
+    {{- if hasKey $redis "publicNetworkAccessEnabled" }}
+    publicNetworkAccessEnabled: {{ $redis.publicNetworkAccessEnabled }}
+    {{- end }}
+    {{- if $redis.redisConfiguration }}
+    redisConfiguration:
+      {{- toYaml $redis.redisConfiguration | nindent 6 }}
+    {{- end }}
+    {{- if $redis.tags }}
+    tags:
+      {{- toYaml $redis.tags | nindent 6 }}
+    {{- end }}
+  providerConfigRef:
+    name: {{ $.Values.providerConfigRef.name | default "default" }}
+  writeConnectionSecretToRef:
+    name: {{ $redis.name }}-redis-connection
+    namespace: {{ $.Values.writeConnectionSecretToRef.namespace | default "default" }}
+{{ end -}}
+{{ end -}}

@@ -1,0 +1,22 @@
+plat-eng-cache-package:
+  team: "test-team"
+  environment: "test"
+  serviceAccount:
+    create: true
+    automount: true
+    annotations: {}
+    name: ""
+  providerConfigRef:
+    name: "test-provider"
+  writeConnectionSecretToRef:
+    namespace: "test-ns"
+  caches:
+    redis:
+      - name: test-redis
+        capacity: 1
+        family: "C"
+        location: "eastus"
+        redisVersion: "6"
+        skuName: "Standard"
+        resourceGroupName: "test-rg"
+        minimumTlsVersion: "1.2"

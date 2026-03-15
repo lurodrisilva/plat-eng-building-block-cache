@@ -1,0 +1,102 @@
+suite: RedisCache Template Tests
+templates:
+  - "charts/plat-eng-cache-package/templates/redis-cache.yaml"
+tests:
+  - it: "should render RedisCache with correct apiVersion"
+    asserts:
+      - equal:
+          path: apiVersion
+          value: cache.azure.upbound.io/v1beta2
+      - equal:
+          path: kind
+          value: RedisCache
+
+  - it: "should use name from values"
+    asserts:
+      - equal:
+          path: metadata.name
+          value: test-redis
+
+  - it: "should set capacity from values"
+    asserts:
+      - equal:
+          path: spec.forProvider.capacity
+          value: 1
+
+  - it: "should set family from values"
+    asserts:
+      - equal:
+          path: spec.forProvider.family
+          value: C
+
+  - it: "should set location from values"
+    asserts:
+      - equal:
+          path: spec.forProvider.location
+          value: eastus
+
+  - it: "should set redisVersion from values"
+    asserts:
+      - equal:
+          path: spec.forProvider.redisVersion
+          value: "6"
+
+  - it: "should set skuName from values"
+    asserts:
+      - equal:
+          path: spec.forProvider.skuName
+          value: Standard
+
+  - it: "should set resourceGroupName from values"
+    asserts:
+      - equal:
+          path: spec.forProvider.resourceGroupName
+          value: test-rg
+
+  - it: "should set minimumTlsVersion to 1.2"
+    asserts:
+      - equal:
+          path: spec.forProvider.minimumTlsVersion
+          value: "1.2"
+
+  - it: "should set providerConfigRef from values"
+    asserts:
+      - equal:
+          path: spec.providerConfigRef.name
+          value: test-provider
+
+  - it: "should set writeConnectionSecretToRef name pattern"
+    asserts:
+      - equal:
+          path: spec.writeConnectionSecretToRef.name
+          value: test-redis-redis-connection
+
+  - it: "should set writeConnectionSecretToRef namespace from values"
+    asserts:
+      - equal:
+          path: spec.writeConnectionSecretToRef.namespace
+          value: test-ns
+
+  - it: "should not render redisConfiguration when not set in values"
+    asserts:
+      - notExists:
+          path: spec.forProvider.redisConfiguration
+
+  - it: "should render redisConfiguration as object when set"
+    set:
+      plat-eng-cache-package:
+        caches:
+          redis:
+            - name: test-redis
+              capacity: 1
+              family: "C"
+              location: "eastus"
+              redisVersion: "6"
+              skuName: "Standard"
+              resourceGroupName: "test-rg"
+              redisConfiguration:
+                maxmemoryPolicy: "allkeys-lru"
+    asserts:
+      - equal:
+          path: spec.forProvider.redisConfiguration.maxmemoryPolicy
+          value: allkeys-lru

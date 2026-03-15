@@ -1,0 +1,33 @@
+# Sisyphus
+.sisyphus/
+
+# Helm build artifacts
+Chart.lock
+charts/
+*.tgz
+
+# Secrets and environment-specific values
+*secrets*
+*secret*
+values-*.yaml
+!values.yaml
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# JetBrains IDEs
+.idea/
+
+# VSCode
+.vscode/
+
+# Vim swap files
+*.swp
+*.swo
+*~
+
+# Temp files
+*.tmp
+*.bak

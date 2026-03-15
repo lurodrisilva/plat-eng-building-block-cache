@@ -1,0 +1,10 @@
+apiVersion: v2
+name: plat-eng-cache-package-tests
+description: Test wrapper chart for cache
+type: application
+version: "0.1.0"
+appVersion: "0.1.0"
+dependencies:
+  - name: plat-eng-cache-package
+    version: "0.1.0"
+    repository: "file://../../"
