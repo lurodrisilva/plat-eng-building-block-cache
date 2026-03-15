@@ -177,7 +177,7 @@ Optional scope in parentheses: `feat(chart):`, `fix(templates):`, `chore(ci):`
 - **kubeconform**: Crossplane `RedisCache` CRD is not in the default K8s schemas — `--ignore-missing-schemas` is required
 - **`redisConfiguration` is an object (not array)** in `cache.azure.upbound.io/v1beta2` — use `toYaml | nindent` to render it correctly (do NOT iterate over it)
 - **`redisVersion` must be quoted** (`"6"`) — bare `6` is parsed as a number by YAML and will fail Crossplane validation
-- **Local Helm v4** has compatibility issues with library charts — CI uses Helm v3.20.0 to avoid this
+- **`.helmignore` must use `./charts/*`** (not `charts/`) — using `charts/` causes Helm to ignore the dependency directory entirely, breaking `helm lint` and `helm template`
 - **`providerConfigRef` and `writeConnectionSecretToRef`** use `$.Values` (root context) inside `range` loops — `$redis` only has the current array entry's values
 - **helm-unittest 1.0.3**: `containsDocument:` is broken — use `documentIndex: N` + `isKind:` instead
 - **yamllint warnings**: "missing document start" on test files is expected (exit 0, non-blocking)
