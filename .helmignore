@@ -16,7 +16,7 @@ tests/
 
 # Helm build artifacts
 Chart.lock
-charts/
+./charts/*
 
 # Secrets
 *secrets*
