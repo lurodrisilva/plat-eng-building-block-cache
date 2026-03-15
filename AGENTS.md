@@ -143,7 +143,7 @@ Optional scope in parentheses: `feat(chart):`, `fix(templates):`, `chore(ci):`
 ## Workflow Guidelines
 
 - **Never push directly to master.** Always work on a feature branch and open a Pull Request.
-- Always create a Pull Request when finishing changes. Do not leave committed work on a branch without a PR.
+- **Always create a Pull Request when finishing changes.** Do not leave committed work on a branch without a PR. Every set of changes — no matter how small — must go through a PR before merging to master.
 - Run `make all` before committing to verify nothing is broken.
 - When modifying templates, run the relevant single test file first for fast feedback.
 - After adding a new optional field to `redis-cache.yaml`, add a corresponding test case for both present and absent scenarios.
