@@ -31,7 +31,7 @@ make test                    # Run all helm-unittest tests
 
 # Run a SINGLE test file:
 helm dependency build tests/chart
-helm unittest -f 'tests/chart/tests/<test_file>.yaml' tests/chart
+helm unittest -f 'tests/chart/tests/unit/<test_file>.yaml' tests/chart
 
 # === Combined ===
 make all                     # lint-all + test + package
@@ -65,7 +65,8 @@ templates/
 tests/chart/                           — Wrapper chart for helm-unittest
   Chart.yaml                           — Declares dependency on this chart via file://../../
   values.yaml                          — Test override values (plat-eng-cache-package.* prefix)
-  tests/                               — Test files (*_test.yaml)
+  tests/
+    unit/                              — Test files (*_test.yaml)
 Chart.yaml                             — Chart metadata and dependencies
 Makefile                               — Build/lint/test automation (12 targets)
 values.yaml                            — Default values

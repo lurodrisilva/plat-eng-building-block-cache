@@ -51,7 +51,7 @@ test: ## Run helm-unittest tests
 	@echo "Building test chart dependencies..."
 	helm dependency build tests/chart
 	@echo "Running helm-unittest tests..."
-	helm unittest tests/chart
+	helm unittest -f 'tests/unit/*.yaml' tests/chart
 
 ## Package the chart into a .tgz archive
 package: ## Package the chart into a versioned .tgz archive

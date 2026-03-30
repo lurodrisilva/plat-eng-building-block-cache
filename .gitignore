@@ -1,33 +1,27 @@
-# Sisyphus
-.sisyphus/
+# Sisyphus orchestration files (internal planning/evidence)
+.sisyphus*
 
-# Helm build artifacts
+# Helm
 Chart.lock
 charts/
+tests/chart/charts/
 *.tgz
 
-# Secrets and environment-specific values
-*secrets*
-*secret*
+# Secret & environment-specific values
+secrets.yaml
+*-secrets.yaml
 values-*.yaml
-!values.yaml
 
-# macOS
+# OS
 .DS_Store
-.AppleDouble
-.LSOverride
+Thumbs.db
 
-# JetBrains IDEs
+# Editor / IDE
 .idea/
-
-# VSCode
 .vscode/
-
-# Vim swap files
 *.swp
 *.swo
-*~
 
-# Temp files
+# Temp & debug
 *.tmp
-*.bak
+helm-debug.log

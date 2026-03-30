@@ -1,33 +1,29 @@
 # Patterns to ignore when building packages.
-# Helm uses .helmignore (similar to .gitignore).
-
+# This supports shell glob matching, relative path matching, and
+# negation (prefixed with !). Only one pattern per line.
+.DS_Store
 # Source control
 .git/
 .gitignore
-.helmignore
-
-# CI/CD and build tools
-.github/
-Makefile
-.yamllint.yml
-
-# Test files (not needed in released chart)
-tests/
-
+# Common backup files
+*.swp
+*.bak
+*.tmp
+*.orig
+*~
+# IDEs
+.project
+.idea/
+*.tmproj
+.vscode/
 # Helm build artifacts
 Chart.lock
 ./charts/*
-
-# Secrets
-*secrets*
-*secret*
-
-# IDE/OS
-.idea/
-.vscode/
-.DS_Store
-*.swp
-*.tmp
-
-# Sisyphus
-.sisyphus/
+# Test infrastructure
+tests/
+# Repo tooling (not part of the chart)
+Makefile
+AGENTS.md
+.sisyphus*
+.github/
+.yamllint.yml
