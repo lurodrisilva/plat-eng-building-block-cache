@@ -2,6 +2,7 @@
 
 [![Helm CI](https://github.com/lurodrisilva/plat-eng-building-block-cache/actions/workflows/helm-ci.yml/badge.svg)](https://github.com/lurodrisilva/plat-eng-building-block-cache/actions/workflows/helm-ci.yml)
 
+
 A Helm chart building block for provisioning Azure Cache for Redis instances via Crossplane.
 
 ## Overview
