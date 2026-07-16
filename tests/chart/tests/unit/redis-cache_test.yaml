@@ -1,88 +1,23 @@
+# This suite used to assert the shape of a rendered RedisCache — name, capacity, family, SKU,
+# and so on. Every one of those assertions passed while the resource itself was impossible to
+# create: Azure Cache for Redis is retired, and Azure rejects each new instance with
+#
+#   400 BadRequest: Azure Cache for Redis is retiring, create Azure Managed Redis instance
+#   instead.
+#
+# A green suite over a doomed resource is worse than no suite, so the contract under test has
+# changed. The block is disabled: it must render nothing by default, and must refuse loudly —
+# not silently emit a broken MR — if someone populates it. See ADR-0013 + ADR-0019.
 suite: RedisCache Template Tests
 templates:
   - "charts/plat-eng-cache-package/templates/redis-cache.yaml"
 tests:
-  - it: "should render RedisCache with correct apiVersion"
+  - it: "renders nothing by default — the building block is disabled"
     asserts:
-      - equal:
-          path: apiVersion
-          value: cache.azure.upbound.io/v1beta2
-      - equal:
-          path: kind
-          value: RedisCache
+      - hasDocuments:
+          count: 0
 
-  - it: "should use name from values"
-    asserts:
-      - equal:
-          path: metadata.name
-          value: test-redis
-
-  - it: "should set capacity from values"
-    asserts:
-      - equal:
-          path: spec.forProvider.capacity
-          value: 1
-
-  - it: "should set family from values"
-    asserts:
-      - equal:
-          path: spec.forProvider.family
-          value: C
-
-  - it: "should set location from values"
-    asserts:
-      - equal:
-          path: spec.forProvider.location
-          value: eastus
-
-  - it: "should set redisVersion from values"
-    asserts:
-      - equal:
-          path: spec.forProvider.redisVersion
-          value: "6"
-
-  - it: "should set skuName from values"
-    asserts:
-      - equal:
-          path: spec.forProvider.skuName
-          value: Standard
-
-  - it: "should set resourceGroupName from values"
-    asserts:
-      - equal:
-          path: spec.forProvider.resourceGroupName
-          value: test-rg
-
-  - it: "should set minimumTlsVersion to 1.2"
-    asserts:
-      - equal:
-          path: spec.forProvider.minimumTlsVersion
-          value: "1.2"
-
-  - it: "should set providerConfigRef from values"
-    asserts:
-      - equal:
-          path: spec.providerConfigRef.name
-          value: test-provider
-
-  - it: "should set writeConnectionSecretToRef name pattern"
-    asserts:
-      - equal:
-          path: spec.writeConnectionSecretToRef.name
-          value: test-redis-redis-connection
-
-  - it: "should set writeConnectionSecretToRef namespace from values"
-    asserts:
-      - equal:
-          path: spec.writeConnectionSecretToRef.namespace
-          value: test-ns
-
-  - it: "should not render redisConfiguration when not set in values"
-    asserts:
-      - notExists:
-          path: spec.forProvider.redisConfiguration
-
-  - it: "should render redisConfiguration as object when set"
+  - it: "fails closed when caches.redis is populated, rather than emitting a retired RedisCache"
     set:
       plat-eng-cache-package:
         caches:
@@ -94,9 +29,24 @@ tests:
               redisVersion: "6"
               skuName: "Standard"
               resourceGroupName: "test-rg"
-              redisConfiguration:
-                maxmemoryPolicy: "allkeys-lru"
+              minimumTlsVersion: "1.2"
     asserts:
-      - equal:
-          path: spec.forProvider.redisConfiguration.maxmemoryPolicy
-          value: allkeys-lru
+      - failedTemplate:
+          errorPattern: "Azure Cache for Redis is retiring"
+
+  - it: "names Azure Managed Redis as the successor so the reader is not left guessing"
+    set:
+      plat-eng-cache-package:
+        caches:
+          redis:
+            - name: test-redis
+              capacity: 1
+              family: "C"
+              location: "eastus"
+              redisVersion: "6"
+              skuName: "Standard"
+              resourceGroupName: "test-rg"
+              minimumTlsVersion: "1.2"
+    asserts:
+      - failedTemplate:
+          errorPattern: "Azure Managed Redis"
