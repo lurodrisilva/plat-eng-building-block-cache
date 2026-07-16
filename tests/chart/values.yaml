@@ -10,13 +10,7 @@ plat-eng-cache-package:
     name: "test-provider"
   writeConnectionSecretToRef:
     namespace: "test-ns"
+  # Disabled: the block renders nothing by default. The fail-closed path is exercised
+  # by redis-cache_test.yaml, which sets caches.redis explicitly.
   caches:
-    redis:
-      - name: test-redis
-        capacity: 1
-        family: "C"
-        location: "eastus"
-        redisVersion: "6"
-        skuName: "Standard"
-        resourceGroupName: "test-rg"
-        minimumTlsVersion: "1.2"
+    redis: []

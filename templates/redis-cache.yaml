@@ -1,5 +1,18 @@
 # DOCS: https://marketplace.upbound.io/providers/upbound/provider-azure-cache/v2.3.0
+#
+# DISABLED. This template emits a RedisCache (Microsoft.Cache/redis) and Azure Cache for Redis
+# is RETIRED — Azure rejects every new instance with
+#
+#   400 BadRequest: Azure Cache for Redis is retiring, create Azure Managed Redis instance
+#   instead.
+#
+# so anything rendered here is guaranteed to fail at apply time. Rather than hand the user a
+# doomed managed resource and let them decode that 400 themselves, populating caches.redis
+# fails the render with the reason. See ADR-0013 + ADR-0019.
 ---
+{{- if .Values.caches.redis }}
+{{- fail "\n\ncaches.redis is set, but this building block is DISABLED and cannot produce a working cache.\n\nIt renders a RedisCache (Microsoft.Cache/redis). Azure Cache for Redis is RETIRED and Azure\nrejects every new instance:\n\n  400 BadRequest: Azure Cache for Redis is retiring, create Azure Managed Redis instance\n  instead. https://aka.ms/AzureCacheForRedisRetirement\n\nThe successor is Azure Managed Redis, reached through the control plane's RedisInstance XR\n(ADR-0013 + ADR-0019) — not a bare managed resource templated here. Re-pointing this chart at\nRedisInstance is Phase C work and is blocked upstream: Azure will not currently create a\nManaged Redis instance in this subscription at all, so plat-eng-control-plane ships the\nRedisInstance API disabled as well.\n\nUnset caches.redis. Do not repopulate it — there is no value that works.\n" }}
+{{- end }}
 {{- if .Values.caches.redis }}
 {{- range $index, $redis := .Values.caches.redis }}
 ---

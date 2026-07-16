@@ -44,18 +44,26 @@ providerConfigRef:
 writeConnectionSecretToRef:
   namespace: default
 
+# caches.redis is DISABLED — this building block renders nothing.
+#
+# It emits a RedisCache (Microsoft.Cache/redis), and Azure Cache for Redis is RETIRED. Azure
+# does not degrade it or warn; it rejects every new instance outright:
+#
+#   400 BadRequest: Azure Cache for Redis is retiring, create Azure Managed Redis instance
+#   instead. https://aka.ms/AzureCacheForRedisRetirement
+#
+# So every entry this list could hold is guaranteed to fail. An empty default is not a
+# preference — it is the only value that cannot produce a broken resource. Populating it is
+# fail-closed in templates/redis-cache.yaml rather than silently emitting a doomed MR.
+#
+# The successor is Azure Managed Redis, and the platform's path to it is the control plane's
+# RedisInstance XR (ADR-0013 + ADR-0019), NOT a bare MR templated here — this chart was already
+# slated to re-point at that XR in Phase C. That work is blocked upstream: Azure will not
+# currently create a Managed Redis instance in this subscription at all (7 attempts, 3 regions,
+# 3 SKUs, all `OperationFailed: The operation failed.`), so plat-eng-control-plane ships
+# RedisInstance disabled too.
+#
+# To re-enable: do NOT repopulate this list. Re-point the template at RedisInstance per Phase C,
+# once ADR-0019's Azure-side blocker is resolved.
 caches:
-  redis:
-    - name: my-redis
-      capacity: 1
-      family: "C"
-      location: "eastus"
-      redisVersion: "6"
-      skuName: "Standard"
-      resourceGroupName: "my-resource-group"
-      minimumTlsVersion: "1.2"
-      # publicNetworkAccessEnabled: true
-      # nonSslPortEnabled: false
-      # redisConfiguration:
-      #   maxmemoryPolicy: volatile-lru
-      # tags: {}
+  redis: []
